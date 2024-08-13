@@ -1,4 +1,5 @@
 langchain
+unstructured
 langchain-text-splitters
 langchain-community
 langchain-chroma
