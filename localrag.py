@@ -1,13 +1,11 @@
-from langchain_community.embeddings import OllamaEmbeddings
-from langchain_community.vectorstores import Chroma
-from langchain_community.chat_models import ChatOllama
-from langchain.prompts import ChatPromptTemplate
-from langchain.schema.runnable import RunnablePassthrough
-from langchain.schema.output_parser import StrOutputParser
-
+from langchain_ollama import OllamaEmbeddings, ChatOllama
+from langchain_chroma import Chroma
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnablePassthrough
 
 #### Create embeddings
-embeddings = OllamaEmbeddings(model="nomic-embed-text", show_progress=False)
+embeddings = OllamaEmbeddings(model="nomic-embed-text")
 
 db = Chroma(persist_directory="./vectorstore",
             embedding_function=embeddings)
@@ -19,46 +17,38 @@ retriever = db.as_retriever(
 )
 
 #### Create Ollama language model - Gemma 2
-local_llm = 'gemma2'
+local_llm = 'llama3.1'
 
 llm = ChatOllama(model=local_llm,
                  keep_alive="3h", 
                  max_tokens=512,  
                  temperature=0)
 
-# Create prompt template
-template = """<bos><start_of_turn>user\nAnswer the question based only on the following context and extract out a meaningful answer. \
-Please write in full sentences with correct spelling and punctuation. if it makes sense use lists. \
-If the context doen't contain the answer, just respond that you are unable to find an answer. \
+#### Convert loaded documents into strings by concatenating their content and ignoring metadata
+def format_docs(docs):
+    return "\n\n".join(doc.page_content for doc in docs)
 
-CONTEXT: {context}
+RAG_TEMPLATE = """
+You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know. Use three sentences maximum and keep the answer concise.
 
-QUESTION: {question}
+<context>
+{context}
+</context>
 
-<end_of_turn>
-<start_of_turn>model\n
-ANSWER:"""
-prompt = ChatPromptTemplate.from_template(template)
+Answer the following question:
 
-# Create the RAG chain using LCEL with prompt printing and streaming output
-rag_chain = (
-    {"context": retriever, "question": RunnablePassthrough()}
-    | prompt
+{question}"""
+
+rag_prompt = ChatPromptTemplate.from_template(RAG_TEMPLATE)
+
+#### Create the RAG chain using LCEL with prompt printing and streaming output
+qa_chain = (
+    {"context": retriever | format_docs, "question": RunnablePassthrough()}
+    | rag_prompt
     | llm
+    | StrOutputParser()
 )
 
-# Function to ask questions
-def ask_question(question):
-    print("Answer:\n\n", end=" ", flush=True)
-    for chunk in rag_chain.stream(question):
-        print(chunk.content, end="", flush=True)
-    print("\n")
+question = "What are the approaches to Task Decomposition?"
 
-# Example usage
-if __name__ == "__main__":
-    while True:
-        user_question = input("Ask a question (or type 'quit' to exit): ")
-        if user_question.lower() == 'quit':
-            break
-        answer = ask_question(user_question)
-        # print("\nFull answer received.\n")
+print(qa_chain.invoke(question))
