@@ -4,6 +4,8 @@
 - Surprisingly I learned how to do HTML and CSS this time.
 - Currently doesn't have memory.
 
+![Screenshot](chatbot_screenshot_latest.png)
+
 ## Document Sources
 1. [Lilian Weng's blog](https://lilianweng.github.io/posts/2023-06-23-agent/)
 2. [OpenStax's Organic Chemistry Textbook](https://openstax.org/books/organic-chemistry/pages/23-1-carbonyl-condensations-the-aldol-reaction)
