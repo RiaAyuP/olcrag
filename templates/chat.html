@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chatbot</title>
+    <title>🔖 Chat with Your File</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
     <!-- Link to the local CSS file -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}" />
 </head>
@@ -9,18 +11,16 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="header-title">Chat with Your File</div>
-            <div class="status">Online</div>
+            <div class="header-title">🔖 Chat with Your File </div>
+            <div class="status">Powered by Ollama (Llama 3.1) and LangChain</div>
         </div>
-        
-
-        <div id="messageFormeight" class="card">
+        <div id="messageFormeight" class="message-container">
             <!-- Messages will be appended here -->
         </div>
 
         <div class="footer">
             <form id="messageArea" class="footer-button">
-                <input type="text" id="text" name="msg" class="message-box" placeholder="Type your message, press Enter to send" autocomplete="off" required />
+                <input type="text" id="text" name="msg" class="message-box" placeholder="Type your message, then press Enter to send 🚀" autocomplete="off" required />
             </form>
         </div>
     </div>
@@ -34,7 +34,7 @@
                 const str_time = hour + ":" + minute;
                 var rawText = document.getElementById("text").value;
 
-                var userHtml = '<div class="card"><div class="msg_container_send">' + rawText + '<span class="msg_time_send">' + str_time + '</span></div><div class="img_cont_msg"><img src="https://riaayupramudita.id/wp-content/uploads/2024/08/user_image.jpeg" class="rounded-circle user_img_msg"></div></div>';
+                var userHtml = '<div class="card"><div class="msg_container_send">' + rawText + '<span class="msg_time_send">' + str_time + '</span></div></div>';
                
                 document.getElementById("text").value = "";
                 document.getElementById("messageFormeight").insertAdjacentHTML('beforeend', userHtml);
@@ -44,7 +44,7 @@
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4 && xhr.status === 200) {
-                        var botHtml = '<div class="card"><div class="img_cont_msg"><img src="https://riaayupramudita.id/wp-content/uploads/2024/08/chatbot_image.jpeg" class="rounded-circle user_img_msg"></div><div class="msg_container">' + xhr.responseText + '<span class="msg_time">' + str_time + '</span></div></div>';
+                        var botHtml = '<div class="card"><div class="msg_container">' + xhr.responseText + '<span class="msg_time">' + str_time + '</span></div></div>';
                         document.getElementById("messageFormeight").insertAdjacentHTML('beforeend', botHtml);
                     }
                 };
