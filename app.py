@@ -4,6 +4,7 @@ from langchain_chroma import Chroma
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
+#### from langchain.memory import ConversationBufferMemory
 
 app = Flask(__name__)
 
@@ -19,7 +20,7 @@ retriever = db.as_retriever(
     search_kwargs= {"k": 5}
 )
 
-#### Create Ollama language model - Gemma 2
+#### Create Ollama language model
 local_llm = 'llama3.1'
 
 llm = ChatOllama(model=local_llm,
