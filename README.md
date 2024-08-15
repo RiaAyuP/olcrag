@@ -2,6 +2,9 @@
 
 Currently not offline as I am trying the example of loading website. Currently doesn't have memory.
 
+## Next Step
+[Upload Files](https://flask.palletsprojects.com/en/2.3.x/patterns/fileuploads/)
+
 ## Comparison
 [Chat with File using Streamlit and Ollama](https://github.com/RiaAyuP/ollamarag) 
 
