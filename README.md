@@ -1,6 +1,6 @@
 # Offline Chat with File using Ollama, Langchain, and Flask
 
-Currently not offline as I am trying the example of loading website.
+Currently not offline as I am trying the example of loading website. Currently doesn't have memory.
 
 ## Comparison
 [Chat with File using Streamlit and Ollama](https://github.com/RiaAyuP/ollamarag) 
